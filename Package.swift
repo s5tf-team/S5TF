@@ -10,7 +10,7 @@ let package = Package(
     products: [
         .library(
             name: "S5TF",
-            targets: ["S5TF"]),
+            targets: ["S5TF"])
     ],
     dependencies: [
     ],
@@ -20,6 +20,6 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "S5TFTests",
-            dependencies: ["S5TF"]),
+            dependencies: ["S5TF"])
     ]
 )
