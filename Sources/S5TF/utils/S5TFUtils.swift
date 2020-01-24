@@ -20,14 +20,14 @@ public struct S5TFUtils {
     ///     shell("/bin/ls", "-lah")`
     ///     ```
     @discardableResult
-    static public func shell(_ launchPath: String, _ arguments: String...) throws -> (out: String?, status: Int32) {
+    static public func shell(_ executableURL: URL, _ arguments: String...) throws -> (out: String?, status: Int32) {
         let task = Process()
-        task.launchPath = launchPath
+        task.executableURL = executableURL
         task.arguments = arguments
 
         let pipe = Pipe()
         task.standardOutput = pipe
-        task.launch()
+        try task.run()
         task.waitUntilExit()
 
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
