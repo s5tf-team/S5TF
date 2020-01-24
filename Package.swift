@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "S5TF",
+    platforms: [
+        .macOS(.v10_13)
+    ],
     products: [
         .library(
             name: "S5TF",
