@@ -1,3 +1,3 @@
 # S5TF
 
-A description of this package.
+S5TF general helper utilities
