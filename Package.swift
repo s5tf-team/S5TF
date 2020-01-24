@@ -4,10 +4,13 @@ import PackageDescription
 
 let package = Package(
     name: "S5TF",
+    platforms: [
+        .macOS(.v10_13)
+    ],
     products: [
         .library(
             name: "S5TF",
-            targets: ["S5TF"]),
+            targets: ["S5TF"])
     ],
     dependencies: [
     ],
@@ -17,6 +20,6 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "S5TFTests",
-            dependencies: ["S5TF"]),
+            dependencies: ["S5TF"])
     ]
 )
