@@ -16,7 +16,7 @@ To use this repository in a project you can use the Swift Package Manager.
 Add the following line to `dependencies` in your `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/s5tf-team/S5TF/", .branch("master"))
+.package(url: "https://github.com/s5tf-team/S5TF", .branch("master"))
 ```
 
 Then add `"S5TF"` as a dependency to a target:
