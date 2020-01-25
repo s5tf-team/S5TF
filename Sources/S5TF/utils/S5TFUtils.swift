@@ -20,7 +20,7 @@ public struct S5TFUtils {
     ///     shell(URL(string: "/bin/ls")!, "-lah")
     ///     ```
     @discardableResult
-    static public func shell(_ executableURL: URL) throws -> (out: String?, status: Int32) {
+    static public func shell(_ executableURL: URL, _ arguments: String...) throws -> (out: String?, status: Int32) {
         let task = Process()
         task.executableURL = executableURL
         task.arguments = arguments
