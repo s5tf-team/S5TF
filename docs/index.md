@@ -6,4 +6,4 @@ Welcome to S5TF!
 
 ## Contents
 
-* [Installation](/installation.html)
+* [Installation](installation.html)
