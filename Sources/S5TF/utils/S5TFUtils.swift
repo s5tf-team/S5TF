@@ -6,7 +6,7 @@ public struct S5TFUtils {
     /// 
     /// - Parameters:
     ///   - `launchPath`: the path to the command.
-    ///   - `paramters`: a list of paramters passed to the command.
+    ///   - `parameters`: a list of parameters passed to the command.
     ///
     /// - Returns: output, termination status of the command.
     ///
