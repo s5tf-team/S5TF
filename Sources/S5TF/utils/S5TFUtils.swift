@@ -94,7 +94,7 @@ public struct S5TFUtils {
     ///   - Download and extract "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz":
     ///     ```
     ///     downloadAndExtract(fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
-    ///                        cacheName: "mnist", fileName: "train_images"))
+    ///                        cacheName: "mnist", fileName: "train_images")
     ///     ```
     ///
     @discardableResult
