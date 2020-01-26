@@ -5,7 +5,7 @@ public struct S5TFUtils {
     /// Run a command in the shell
     /// 
     /// - Parameters:
-    ///   - `executableURL`: the path to the command as URL.
+    ///   - `launchPath`: the path to the command.
     ///   - `parameters`: a list of parameters passed to the command.
     ///
     /// - Returns: output, termination status of the command.
@@ -13,11 +13,11 @@ public struct S5TFUtils {
     /// - Usage Example:
     ///   - Execute `ls -l -g`:
     ///     ```
-    ///     shell(URL(string: "/bin/ls")!, "-l", "-g")
+    ///     shell("/bin/ls", "-l", "-g")
     ///     ```
     ///   - Execute `ls -lah`
     ///     ```
-    ///     shell(URL(string: "/bin/ls")!, "-lah")
+    ///     shell("/bin/ls", "-lah")
     ///     ```
     @discardableResult
     static public func shell(_ launchPath: String, _ arguments: [String]) throws -> (out: String?, status: Int32) {
