@@ -21,7 +21,7 @@ public struct S5TFUtils {
     ///     ```
     @discardableResult
     static public func shell(_ launchPath: String, _ arguments: String...) throws -> (out: String?, status: Int32) {
-        return shell(launchPath, arguments)
+        return try shell(launchPath, arguments)
     }
 
     /// Run a command in the shell.
