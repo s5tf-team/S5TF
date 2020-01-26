@@ -102,8 +102,7 @@ public struct S5TFUtils {
     static public func downloadAndExtract(fileAt: URL, cacheName: String, fileName: String) throws -> (out: String?, status: Int32) {
         let semaphore = DispatchSemaphore(value: 0)
         var archiveURL: URL? = nil
-        let downloader = Downloader()
-        downloader.download(fileAt: fileAt, cacheName: cacheName, fileName: fileName) {url, error in
+        Downloader().download(fileAt: fileAt, cacheName: cacheName, fileName: fileName) {url, error in
             guard let url = url else {
                 if let error = error { print(error) }
                 fatalError("Data not downloaded.")
