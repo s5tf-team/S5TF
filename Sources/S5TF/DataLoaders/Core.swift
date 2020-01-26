@@ -22,6 +22,6 @@ public struct S5TFLabeledBatch: S5TFBatch {
 }
 
 // MARK: - S5TFDataLoader
-protocol S5TFDataLoader: Sequence, IteratorProtocol {
+public protocol S5TFDataLoader: Sequence, IteratorProtocol {
     func batched(_ batchSize: Int) -> Self
 }
