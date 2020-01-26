@@ -104,6 +104,7 @@ public struct S5TFUtils {
         let downloader = Downloader()
         downloader.download(fileAt: fileAt, cacheName: cacheName, fileName: fileName) {url, err in
             guard let url = url else {
+                if let error = error { print(error) }
                 fatalError("Data not downloaded.")
             }
             archiveURL = url
