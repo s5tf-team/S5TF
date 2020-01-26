@@ -60,7 +60,7 @@ public struct CSVDataLoader: S5TFDataLoader {
             let firstrow = rows[0]
             definiteColumnNames = firstrow.split(separator: ",").map(String.init)
             // Use `.map({String($0)})` because `.map(String.init)` does not compile.
-            rows = rows.dropFirst().dropFirst().map({String($0)}) // Drop column row.
+            rows = rows.dropFirst().map({String($0)}) // Drop column row.
         }
 
         // Make sure featureColumnNames and labelColumnNames are valid.
@@ -141,9 +141,10 @@ public struct CSVDataLoader: S5TFDataLoader {
 
     // MARK: - Iterator
     public mutating func next() -> S5TFLabeledBatch? {
-        guard index < (count - 1) else {
+        guard index < (count - batchSize) else {
             return nil
         }
+
         // Use a partial batch is fewer items than the batch size are available.
         let thisBatchSize = Swift.min(count - index - batchSize, batchSize)
 

@@ -1,7 +1,7 @@
 import TensorFlow
 
 // MARK: - S5TFBatch
-protocol S5TFBatch {}
+public protocol S5TFBatch {}
 
 public struct S5TFUnlabeledBatch: S5TFBatch {
     public var data: Float
