@@ -79,7 +79,7 @@ public struct S5TFUtils {
                 fatalError("Unsupported file extension for archive.")
         }
 
-        return try shell(URL(fileURLWithPath: binary+tool), arguments)
+        return try shell(binary+tool, arguments)
     }
 
     /// Download and extract an archive.
