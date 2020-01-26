@@ -5,8 +5,8 @@ public struct CSVDataLoader: S5TFDataLoader {
     private var index = 0
 
     public let batchSize: Int
-    private let data: Tensor<Float>
-    private let labels: Tensor<Int32>
+    public let data: Tensor<Float>
+    public let labels: Tensor<Int32>
 
     public let count: Int
     public let numberOfFeatures: Int
