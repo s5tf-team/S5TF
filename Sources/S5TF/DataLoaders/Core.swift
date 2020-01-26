@@ -4,12 +4,21 @@ import TensorFlow
 protocol S5TFBatch {}
 
 public struct S5TFUnlabeledBatch: S5TFBatch {
-    var data: Float
+    public var data: Float
+
+    public init(data: Float) {
+        self.data = data
+    }
 }
 
 public struct S5TFLabeledBatch: S5TFBatch {
-    var data: Tensor<Float>
-    var labels: Tensor<Int32>
+    public var data: Tensor<Float>
+    public var labels: Tensor<Int32>
+
+    public init(data: Tensor<Float>, labels: Tensor<Int32>) {
+        self.data = data
+        self.labels = labels
+    }
 }
 
 // MARK: - S5TFDataLoader
