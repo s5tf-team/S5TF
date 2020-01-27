@@ -22,7 +22,7 @@ final class S5TFDownloaderTests: XCTestCase {
         XCTAssertNotNil(localURL)
 
         // Delete file after we are done.
-        try! FileManager.default.removeItem(atPath: localURL!.absoluteString)
+        try? FileManager.default.removeItem(atPath: localURL!.absoluteString)
     }
 
     func testSyncDownloader() {
@@ -34,6 +34,6 @@ final class S5TFDownloaderTests: XCTestCase {
         XCTAssertNotNil(localURL)
 
         // Delete file after we are done.
-        try! FileManager.default.removeItem(atPath: localURL!.absoluteString)
+        try? FileManager.default.removeItem(atPath: localURL!.absoluteString)
     }
 }
