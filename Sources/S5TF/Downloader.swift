@@ -28,7 +28,29 @@ public class Downloader: NSObject {
         return baseURL
     }()
 
-    /// Downloads a file.
+    /// Downloads a file asynchronously.
+    ///
+    /// - Usage Example:
+    ///   - Download MNIST files:
+    ///     ```
+    ///     let semaphore = DispatchSemaphore(value: 0)
+    ///     let downloader = Downloader()
+    ///     var localURL: URL?
+    ///     downloader.download(
+    ///         fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///         cacheName: "mnist",
+    ///         fileName: "train-images.gz"
+    ///     ) { url, error in
+    ///         guard let url = url else {
+    ///             if let error = error { print(error) }
+    ///             fatalError("Data not downloaded.")
+    ///         }
+    ///         localURL = url
+    ///         semaphore.signal()
+    ///     }
+    ///     semaphore.wait()
+    ///     // Use the URL here.
+    ///     ```
     ///
     /// - Parameters:
     ///   - `fileAt`: the remote url
@@ -68,6 +90,17 @@ public class Downloader: NSObject {
     }
 
     /// Downloads a file synchronously.
+    ///
+    /// - Usage Example:
+    ///   - Download MNIST files:
+    ///     ```
+    ///     let localURL = Downloader.download(
+    ///         fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///         cacheName: "mnist",
+    ///         fileName: "train-images.gz"
+    ///     )
+    ///     // Use the URL here.s
+    ///     ```
     ///
     /// - Parameters:
     ///   - `fileAt`: the remote url
