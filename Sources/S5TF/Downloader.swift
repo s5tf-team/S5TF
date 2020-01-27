@@ -11,7 +11,6 @@ public class Downloader: NSObject {
 
     private var saveURL: URL?
     private var completionHandler: ((URL?, Error?) -> Void)?
-    private var semaphore: DispatchSemaphore?
     private var startingTime: Date?
 
     private var baseURL: URL = {
@@ -29,7 +28,29 @@ public class Downloader: NSObject {
         return baseURL
     }()
 
-    /// Downloads a file.
+    /// Downloads a file asynchronously.
+    ///
+    /// - Usage Example:
+    ///   - Download MNIST files:
+    ///     ```
+    ///     let semaphore = DispatchSemaphore(value: 0)
+    ///     let downloader = Downloader()
+    ///     var localURL: URL?
+    ///     downloader.download(
+    ///         fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///         cacheName: "mnist",
+    ///         fileName: "train-images.gz"
+    ///     ) { url, error in
+    ///         guard let url = url else {
+    ///             if let error = error { print(error) }
+    ///             fatalError("Data not downloaded.")
+    ///         }
+    ///         localURL = url
+    ///         semaphore.signal()
+    ///     }
+    ///     semaphore.wait()
+    ///     // Use the URL here.
+    ///     ```
     ///
     /// - Parameters:
     ///   - `fileAt`: the remote url
@@ -63,13 +84,47 @@ public class Downloader: NSObject {
             self.saveURL = saveURL
         }
 
-        // Start a new download task. Use a semaphore to wait for the download progress to finish
-        // before we continue execution.
-        semaphore = DispatchSemaphore(value: 0)
         session.downloadTask(with: remoteUrl).resume()
         self.completionHandler = completionHandler
         startingTime = Date()
-        semaphore!.wait()
+    }
+
+    /// Downloads a file synchronously.
+    ///
+    /// - Usage Example:
+    ///   - Download MNIST files:
+    ///     ```
+    ///     let localURL = Downloader.download(
+    ///         fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///         cacheName: "mnist",
+    ///         fileName: "train-images.gz"
+    ///     )
+    ///     // Use the URL here.s
+    ///     ```
+    ///
+    /// - Parameters:
+    ///   - `fileAt`: the remote url
+    ///   - `cacheName`: the directory in the base directory where the file will be saved. This
+    ///                  directory should be consistent with subsequent requests to enable caching.
+    ///   - `fileName`: the desired file name of the local file.
+    static public func download(fileAt remoteUrl: URL,
+                                cacheName: String,
+                                fileName: String) -> URL? {
+        let semaphore = DispatchSemaphore(value: 0)
+        let downloader = Downloader()
+        var localURL: URL?
+        downloader.download(fileAt: remoteUrl,
+                            cacheName: cacheName,
+                            fileName: "train-images.gz") { url, error in
+            guard let url = url else {
+                if let error = error { print(error) }
+                fatalError("Data not downloaded.")
+            }
+            localURL = url
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return localURL
     }
 }
 
@@ -107,15 +162,18 @@ extension Downloader: URLSessionDownloadDelegate {
     public func urlSession(_ session: URLSession,
                            downloadTask: URLSessionDownloadTask,
                            didFinishDownloadingTo location: URL) {
-        print("\n") // Keep the progress bar.
-        semaphore?.signal()
-        startingTime = nil
+        print() // Keep the progress bar.
 
         // Move the file to the desired local URL.
+        guard let saveURL = self.saveURL else {
+            fatalError("Done downloading, but I don't know where to move the file. ")
+        }
+
         do {
-            try FileManager.default.moveItem(at: location, to: URL(string: "file://"+saveURL!.absoluteString)!)
-            completionHandler?(saveURL!, nil)
-            saveURL = nil
+            try FileManager.default.moveItem(at: location, to: URL(string: "file://"+saveURL.absoluteString)!)
+            self.completionHandler?(saveURL, nil)
+            self.saveURL = nil
+            startingTime = nil
         } catch {
             completionHandler?(nil, error)
         }
@@ -124,10 +182,12 @@ extension Downloader: URLSessionDownloadDelegate {
     public func urlSession(_ session: URLSession,
                            task: URLSessionTask,
                            didCompleteWithError error: Error?) {
-        print("\n") // Keep the progress bar.
-        semaphore?.signal()
-        startingTime = nil
-        saveURL = nil
+        // Both `didFinishDownloadingTo` and `didCompleteWithError` are called, so we have to make sure
+        // we have an error before we continue.
+        guard let error = error else {
+            return
+        }
+
         completionHandler?(nil, error)
     }
 }
