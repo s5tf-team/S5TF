@@ -16,20 +16,6 @@
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
-      "line": 8,
-      "symbol": "CSVDataLoader.data",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
-      "line": 9,
-      "symbol": "CSVDataLoader.labels",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
       "line": 11,
       "symbol": "CSVDataLoader.count",
       "symbol_kind": "source.lang.swift.decl.var.instance",
@@ -44,7 +30,7 @@
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
-      "line": 136,
+      "line": 135,
       "symbol": "CSVDataLoader.batched(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -115,6 +101,13 @@
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
       "line": 26,
+      "symbol": "S5TFDataLoader.batchSize",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 27,
       "symbol": "S5TFDataLoader.batched(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -135,7 +128,7 @@
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/Downloader.swift",
-      "line": 186,
+      "line": 185,
       "symbol": "Downloader.urlSession(_:task:didCompleteWithError:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
