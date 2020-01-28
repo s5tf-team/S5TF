@@ -79,9 +79,9 @@ public struct S5TFUtils {
     ///     ```
     ///
     @discardableResult
-    static public func extract(fileAt: URL) {
-        let path = fileAt.path
-        let fileExtension = fileAt.pathExtension
+    static public func extract(archiveURL: URL) -> URL {
+        let path = archiveURL.path
+        let fileExtension = archiveURL.pathExtension
 
         #if os(macOS)
             let binary = "/usr/bin/"
@@ -102,38 +102,38 @@ public struct S5TFUtils {
             default:
                 fatalError("Unsupported file extension for archive.")
         }
-        if !FileManager.default.fileExists(atPath: fileAt.absoluteString.deletingPathExtension) {
+        if !FileManager.default.fileExists(atPath: archiveURL.absoluteString.deletingPathExtension) {
             do {
-                try shell(binary+tool, arguments)
+                try shell(binary + tool, arguments)
             } catch {
                 fatalError("Error extracting file.")
             }
         }
 
+        return URL(string: archiveURL.absoluteString.deletingPathExtension)!
     }
 
     /// Download and extract an archive.
     /// 
     /// - Parameters:
-    ///   - `fileAt`: the remote URL for the archive.
+    ///   - `remoteURL`: the remote URL for the archive.
     ///   - `cacheName`: name of the cache.
     ///   - `fileName`: name of the file.
     ///
-    /// - Returns: output, termination status of the command.
+    /// - Returns: URL of extracted archive.
     ///
     /// - Usage Example:
     ///   - Download and extract "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz":
     ///     ```
-    ///     downloadAndExtract(fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///     downloadAndExtract(remoteURL: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
     ///                        cacheName: "mnist", fileName: "train_images")
     ///     ```
     ///
     @discardableResult
-    static public func downloadAndExtract(fileAt: URL, cacheName: String, fileName: String) -> URL? {
-        let localURL = Downloader.download(fileAt: fileAt,
-                                           cacheName: cacheName,
-                                           fileName: fileName)
-        extract(fileAt: localURL!)
-        return localURL
+    static public func downloadAndExtract(remoteURL: URL, cacheName: String, fileName: String) -> URL? {
+        let archiveURL = Downloader.download(fileAt: remoteURL,
+                                             cacheName: cacheName,
+                                             fileName: fileName)
+        return extract(archiveURL: archiveURL!)
     }
 }
