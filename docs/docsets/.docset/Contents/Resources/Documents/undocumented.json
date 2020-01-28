@@ -1,0 +1,117 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
+      "line": 4,
+      "symbol": "CSVDataLoader",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
+      "line": 7,
+      "symbol": "CSVDataLoader.batchSize",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
+      "line": 8,
+      "symbol": "CSVDataLoader.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
+      "line": 9,
+      "symbol": "CSVDataLoader.labels",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
+      "line": 11,
+      "symbol": "CSVDataLoader.count",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
+      "line": 12,
+      "symbol": "CSVDataLoader.numberOfFeatures",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/CSVDataLoader.swift",
+      "line": 136,
+      "symbol": "CSVDataLoader.batched(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 9,
+      "symbol": "S5TFUnlabeledBatch.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 11,
+      "symbol": "S5TFUnlabeledBatch.init(data:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 18,
+      "symbol": "S5TFLabeledBatch.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 19,
+      "symbol": "S5TFLabeledBatch.labels",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 21,
+      "symbol": "S5TFLabeledBatch.init(data:labels:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 30,
+      "symbol": "S5TFDataLoader.batched(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/Downloader.swift",
+      "line": 136,
+      "symbol": "Downloader.urlSession(_:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/Downloader.swift",
+      "line": 166,
+      "symbol": "Downloader.urlSession(_:downloadTask:didFinishDownloadingTo:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/Downloader.swift",
+      "line": 186,
+      "symbol": "Downloader.urlSession(_:task:didCompleteWithError:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/rickwierenga/workspace/gci/src/s/S5TF"
+}
