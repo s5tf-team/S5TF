@@ -163,7 +163,6 @@ extension Downloader: URLSessionDownloadDelegate {
                            downloadTask: URLSessionDownloadTask,
                            didFinishDownloadingTo location: URL) {
         print() // Keep the progress bar.
-
         // Move the file to the desired local URL.
         guard let saveURL = self.saveURL else {
             fatalError("Done downloading, but I don't know where to move the file. ")
