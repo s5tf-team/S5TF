@@ -78,7 +78,6 @@ public struct S5TFUtils {
     ///     extract(fileAt: URL(string: "archive_archive.gz")!)
     ///     ```
     ///
-    @discardableResult
     static public func extract(archiveURL: URL) -> URL {
         let path = archiveURL.path
         let fileExtension = archiveURL.pathExtension
