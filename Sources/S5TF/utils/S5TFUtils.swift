@@ -99,10 +99,16 @@ public struct S5TFUtils {
     ///     ```
     ///
     @discardableResult
-    static public func downloadAndExtract(fileAt: URL, cacheName: String, fileName: String) throws -> (out: String?, status: Int32) {
+    static public func downloadAndExtract(fileAt: URL, cacheName: String, fileName: String) -> URL? {
         let localURL = Downloader.download(fileAt: fileAt,
                                            cacheName: cacheName,
                                            fileName: fileName)
-        return try extract(fileAt: localURL!)
+        do {
+            try extract(fileAt: localURL!)
+        } catch {
+            fatalError("Archive not extracted.")
+        }
+        
+        return localURL
     }
 }
