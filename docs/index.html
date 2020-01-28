@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+           Docs
+        </a>
+         (31% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/s5tf-team/">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html"> Reference</a>
+      <img class="carat" src="img/carat.png" />
+        Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Downloader.html">Downloader</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols.html#/s:4S5TF0A7TFBatchP">S5TFBatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/S5TFDataLoader.html">S5TFDataLoader</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/CSVDataLoader.html">CSVDataLoader</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/S5TFLabeledBatch.html">S5TFLabeledBatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/S5TFUnlabeledBatch.html">S5TFUnlabeledBatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/S5TFUtils.html">S5TFUtils</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            
+            <h1 id='s5tf' class='heading'>S5TF</h1>
+
+<p>S5TF general helper utilities</p>
+<h2 id='concepts' class='heading'>Concepts</h2>
+<h3 id='dataloaders' class='heading'>DataLoaders</h3>
+
+<p>Data loaders are objects that load data and make it iterable in mini batches. It is possible to create a custom data loader tailored for your specific needs or you can use one of the default data loaders available:</p>
+
+<ul>
+<li><a href="/Sources/S5TF/DataLoaders/CSVDataLoader.swift">CSVDataLoader</a></li>
+</ul>
+
+<p>An example of using a data loader (inspired by <a href="http://archive.ics.uci.edu/ml/datasets/Iris">UCI Iris</a>):</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">dataLoader</span> <span class="o">=</span> <span class="kt">CSVDataLoader</span><span class="p">(</span><span class="nv">fromFileAt</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"~/.s5tf-datasets/iris/iris.csv"</span><span class="p">)</span><span class="o">!</span><span class="p">,</span>
+                               <span class="nv">columnNames</span><span class="p">:</span> <span class="p">[</span><span class="s">"sepal length in cm"</span><span class="p">,</span>
+                                             <span class="s">"sepal width"</span><span class="p">,</span>
+                                             <span class="s">"petal length"</span><span class="p">,</span>
+                                             <span class="s">"petal width"</span><span class="p">,</span>
+                                             <span class="s">"species"</span><span class="p">],</span>
+                               <span class="nv">featureColumnNames</span><span class="p">:</span> <span class="p">[</span><span class="s">"sepal length in cm"</span><span class="p">,</span>
+                                                    <span class="s">"sepal width"</span><span class="p">,</span>
+                                                    <span class="s">"petal length"</span><span class="p">,</span>
+                                                    <span class="s">"petal width"</span><span class="p">],</span>
+                               <span class="nv">labelColumnNames</span><span class="p">:</span> <span class="p">[</span><span class="s">"species"</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">batch</span> <span class="k">in</span> <span class="n">dataLoader</span><span class="o">.</span><span class="nf">batched</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Check out <a href="https://github.com/s5tf-team/datasets">s5tf-team/datasets</a> for predefined data loaders for a selection of public datasets.</p>
+<h2 id='contributing-️' class='heading'>Contributing ❤️</h2>
+
+<p>Thanks for even considering contributing.</p>
+
+<p>Make sure to run <a href="https://github.com/realm/SwiftLint"><code>swiftlint</code></a> on your code. If you are not sure about how to format something, refer to the <a href="https://google.github.io/swift/">Google Swift Style Guide</a>.</p>
+
+<p>Please link to the completed GitHub Actions <code>build</code> test in your fork with your PR.</p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="http://s5tf-team.github.io" target="_blank" rel="external">S5TF</a>. All rights reserved. (Last updated: 2020-01-28)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

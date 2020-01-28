@@ -30,36 +30,38 @@ public class Downloader: NSObject {
 
     /// Downloads a file asynchronously.
     ///
-    /// - Usage Example:
-    ///   - Download MNIST files:
-    ///     ```
-    ///     let semaphore = DispatchSemaphore(value: 0)
-    ///     let downloader = Downloader()
-    ///     var localURL: URL?
-    ///     downloader.download(
-    ///         fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
-    ///         cacheName: "mnist",
-    ///         fileName: "train-images.gz"
-    ///     ) { url, error in
-    ///         guard let url = url else {
-    ///             if let error = error { print(error) }
-    ///             fatalError("Data not downloaded.")
-    ///         }
-    ///         localURL = url
-    ///         semaphore.signal()
-    ///     }
-    ///     semaphore.wait()
-    ///     // Use the URL here.
-    ///     ```
-    ///
     /// - Parameters:
-    ///   - `fileAt`: the remote url
-    ///   - `cacheName`: the directory in the base directory where the file will be saved. This
-    ///                  directory should be consistent with subsequent requests to enable caching.
-    ///   - `fileName`: the desired file name of the local file.
-    ///   - `completionHandler`: will be called upon completion. First item might be the local path,
-    ///                          second item might be an error. If the item can't be saved to the local
-    ///                          url an error will be returned.
+    ///   - fileAt: the remote url.
+    ///   - cacheName: the directory in the base directory where the file will be saved. This
+    ///                directory should be consistent with subsequent requests to enable caching.
+    ///   - fileName: the desired file name of the local file.
+    ///   - completionHandler: will be called upon completion. First item might be the local path,
+    ///                        second item might be an error. If the item can't be saved to the local
+    ///                        url an error will be returned.
+    ///
+    /// ### Usage Example: ###
+    ///
+    /// - Download MNIST files:
+    ///
+    ///   ````
+    ///   let semaphore = DispatchSemaphore(value: 0)
+    ///   let downloader = Downloader()
+    ///   var localURL: URL?
+    ///   downloader.download(
+    ///       fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///       cacheName: "mnist",
+    ///       fileName: "train-images.gz"
+    ///   ) { url, error in
+    ///       guard let url = url else {
+    ///           if let error = error { print(error) }
+    ///           fatalError("Data not downloaded.")
+    ///       }
+    ///       localURL = url
+    ///       semaphore.signal()
+    ///   }
+    ///   semaphore.wait()
+    ///   // Use the URL here.
+    ///   ````
     public func download(fileAt remoteUrl: URL,
                          cacheName: String,
                          fileName: String,
@@ -89,24 +91,26 @@ public class Downloader: NSObject {
         startingTime = Date()
     }
 
-    /// Downloads a file synchronously.
-    ///
-    /// - Usage Example:
-    ///   - Download MNIST files:
-    ///     ```
-    ///     let localURL = Downloader.download(
-    ///         fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
-    ///         cacheName: "mnist",
-    ///         fileName: "train-images.gz"
-    ///     )
-    ///     // Use the URL here.s
-    ///     ```
+    /// Downloads a file asynchronously.
     ///
     /// - Parameters:
     ///   - `fileAt`: the remote url
     ///   - `cacheName`: the directory in the base directory where the file will be saved. This
     ///                  directory should be consistent with subsequent requests to enable caching.
     ///   - `fileName`: the desired file name of the local file.
+    ///
+    /// ### Usage Example: ###
+    ///
+    /// - Download MNIST files:
+    ///
+    ///   `````
+    ///   let localURL = Downloader.download(
+    ///       fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///       cacheName: "mnist",
+    ///       fileName: "train-images.gz"
+    ///   )
+    ///   // Use the URL here.
+    ///   `````
     static public func download(fileAt remoteUrl: URL,
                                 cacheName: String,
                                 fileName: String) -> URL? {
