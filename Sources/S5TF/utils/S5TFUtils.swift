@@ -101,17 +101,11 @@ public struct S5TFUtils {
     @discardableResult
     static public func downloadAndExtract(fileAt: URL, cacheName: String, fileName: String) throws -> (out: String?, status: Int32) {
         let semaphore = DispatchSemaphore(value: 0)
-        var archiveURL: URL? = nil
-        Downloader().download(fileAt: fileAt, cacheName: cacheName, fileName: fileName) {url, error in
-            guard let url = url else {
-                if let error = error { print(error) }
-                fatalError("Data not downloaded.")
-            }
-            archiveURL = url
-            semaphore.signal()
-        }
+        let localURL = Downloader.download(fileAt: fileAt,
+                                           cacheName: cacheName,
+                                           fileName: fileName)
         semaphore.wait()
 
-        return try extract(fileAt: archiveURL!)
+        return try extract(fileAt: localURL!)
     }
 }
