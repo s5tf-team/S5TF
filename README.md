@@ -36,4 +36,14 @@ Thanks for even considering contributing.
 
 Make sure to run [`swiftlint`](https://github.com/realm/SwiftLint) on your code. If you are not sure about how to format something, refer to the [Google Swift Style Guide](https://google.github.io/swift/).
 
+We use [jazzy](https://github.com/realm/jazzy) to generate documentation for this projct. If your contribution creates new objects, please create documentation with the following command:
+
+```sh
+jazzy \
+--author S5TF Team \
+--author_url http://s5tf-team.github.io \
+--github_url https://github.com/s5tf-team/ \
+--theme fullwidth
+```
+
 Please link to the completed GitHub Actions `build` test in your fork with your PR.
