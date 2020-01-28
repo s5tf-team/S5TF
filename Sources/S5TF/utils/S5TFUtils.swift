@@ -100,12 +100,9 @@ public struct S5TFUtils {
     ///
     @discardableResult
     static public func downloadAndExtract(fileAt: URL, cacheName: String, fileName: String) throws -> (out: String?, status: Int32) {
-        let semaphore = DispatchSemaphore(value: 0)
         let localURL = Downloader.download(fileAt: fileAt,
                                            cacheName: cacheName,
                                            fileName: fileName)
-        semaphore.wait()
-
         return try extract(fileAt: localURL!)
     }
 }
