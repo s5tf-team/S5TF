@@ -79,7 +79,7 @@ public struct S5TFUtils {
     ///     ```
     ///
     @discardableResult
-    static public func extract(fileAt: URL) throws -> (out: String?, status: Int32) {
+    static public func extract(fileAt: URL) {
         let path = fileAt.path
         let fileExtension = fileAt.pathExtension
 
@@ -102,8 +102,14 @@ public struct S5TFUtils {
             default:
                 fatalError("Unsupported file extension for archive.")
         }
+        if !FileManager.default.fileExists(atPath: fileAt.absoluteString.deletingPathExtension) {
+            do {
+                try shell(binary+tool, arguments)
+            } catch {
+                fatalError("Error extracting file.")
+            }
+        }
 
-        return try shell(binary+tool, arguments)
     }
 
     /// Download and extract an archive.
@@ -127,12 +133,7 @@ public struct S5TFUtils {
         let localURL = Downloader.download(fileAt: fileAt,
                                            cacheName: cacheName,
                                            fileName: fileName)
-        do {
-            try extract(fileAt: localURL!)
-        } catch {
-            fatalError("Archive not extracted.")
-        }
-        
+        extract(fileAt: localURL!)
         return localURL
     }
 }
