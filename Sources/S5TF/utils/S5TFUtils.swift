@@ -10,15 +10,15 @@ public struct S5TFUtils {
     ///
     /// - Returns: output, termination status of the command.
     ///
-    /// ### Usage Example: ###
+    /// - Usage Example:
     ///   - Execute `ls -l -g`:
-    ///     ````
+    ///     ```
     ///     shell("/bin/ls", "-l", "-g")`
-    ///     ````
+    ///     ```
     ///   - Execute `ls -lah`
-    ///     ````
+    ///     ```
     ///     shell("/bin/ls", "-lah")`
-    ///     ````
+    ///     ```
     @discardableResult
     static public func shell(_ launchPath: String, _ arguments: String...) throws -> (out: String?, status: Int32) {
         return try shell(launchPath, arguments)

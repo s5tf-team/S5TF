@@ -123,29 +123,33 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Downloads a file asynchronously.</p>
-<h3 id='usage-example' class='heading'>Usage Example:</h3>
 
 <ul>
-<li>Download MNIST files:</li>
+<li><p>Usage Example:</p>
+
+<ul>
+<li>Download MNIST files:
+<code>
+let semaphore = DispatchSemaphore(value: 0)
+let downloader = Downloader()
+var localURL: URL?
+downloader.download(
+fileAt: URL(string: &quot;https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz&quot;)!,
+cacheName: &quot;mnist&quot;,
+fileName: &quot;train-images.gz&quot;
+) { url, error in
+guard let url = url else {
+    if let error = error { print(error) }
+    fatalError(&quot;Data not downloaded.&quot;)
+}
+localURL = url
+semaphore.signal()
+}
+semaphore.wait()
+// Use the URL here.
+</code></li>
+</ul></li>
 </ul>
-<pre class="highlight swift"><code>  <span class="k">let</span> <span class="nv">semaphore</span> <span class="o">=</span> <span class="kt">DispatchSemaphore</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="k">let</span> <span class="nv">downloader</span> <span class="o">=</span> <span class="kt">Downloader</span><span class="p">()</span>
-  <span class="k">var</span> <span class="nv">localURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span>
-  <span class="n">downloader</span><span class="o">.</span><span class="nf">download</span><span class="p">(</span>
-      <span class="nv">fileAt</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz"</span><span class="p">)</span><span class="o">!</span><span class="p">,</span>
-      <span class="nv">cacheName</span><span class="p">:</span> <span class="s">"mnist"</span><span class="p">,</span>
-      <span class="nv">fileName</span><span class="p">:</span> <span class="s">"train-images.gz"</span>
-  <span class="p">)</span> <span class="p">{</span> <span class="n">url</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
-      <span class="k">guard</span> <span class="k">let</span> <span class="nv">url</span> <span class="o">=</span> <span class="n">url</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">}</span>
-          <span class="nf">fatalError</span><span class="p">(</span><span class="s">"Data not downloaded."</span><span class="p">)</span>
-      <span class="p">}</span>
-      <span class="n">localURL</span> <span class="o">=</span> <span class="n">url</span>
-      <span class="n">semaphore</span><span class="o">.</span><span class="nf">signal</span><span class="p">()</span>
-  <span class="p">}</span>
-  <span class="n">semaphore</span><span class="o">.</span><span class="nf">wait</span><span class="p">()</span>
-  <span class="c1">// Use the URL here.</span>
-</code></pre>
 
                       </div>
                       <div class="declaration">
@@ -158,64 +162,6 @@
                      <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">URL</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>fileAt</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the remote url.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>cacheName</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the directory in the base directory where the file will be saved. This
-       directory should be consistent with subsequent requests to enable caching.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>fileName</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the desired file name of the local file.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>will be called upon completion. First item might be the local path,
-               second item might be an error. If the item can&rsquo;t be saved to the local
-               url an error will be returned.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -233,19 +179,23 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Downloads a file asynchronously.</p>
-<h3 id='usage-example' class='heading'>Usage Example:</h3>
+                        <p>Downloads a file synchronously.</p>
 
 <ul>
-<li>Download MNIST files:</li>
+<li><p>Usage Example:</p>
+
+<ul>
+<li>Download MNIST files:
+<code>
+let localURL = Downloader.download(
+fileAt: URL(string: &quot;https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz&quot;)!,
+cacheName: &quot;mnist&quot;,
+fileName: &quot;train-images.gz&quot;
+)
+// Use the URL here.s
+</code></li>
+</ul></li>
 </ul>
-<pre class="highlight swift"><code>  <span class="k">let</span> <span class="nv">localURL</span> <span class="o">=</span> <span class="kt">Downloader</span><span class="o">.</span><span class="nf">download</span><span class="p">(</span>
-      <span class="nv">fileAt</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz"</span><span class="p">)</span><span class="o">!</span><span class="p">,</span>
-      <span class="nv">cacheName</span><span class="p">:</span> <span class="s">"mnist"</span><span class="p">,</span>
-      <span class="nv">fileName</span><span class="p">:</span> <span class="s">"train-images.gz"</span>
-  <span class="p">)</span>
-  <span class="c1">// Use the URL here.</span>
-</code></pre>
 
                       </div>
                       <div class="declaration">

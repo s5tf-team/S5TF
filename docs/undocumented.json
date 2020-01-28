@@ -121,21 +121,21 @@
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/Downloader.swift",
-      "line": 136,
+      "line": 132,
       "symbol": "Downloader.urlSession(_:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/Downloader.swift",
-      "line": 166,
+      "line": 162,
       "symbol": "Downloader.urlSession(_:downloadTask:didFinishDownloadingTo:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/Downloader.swift",
-      "line": 186,
+      "line": 182,
       "symbol": "Downloader.urlSession(_:task:didCompleteWithError:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
