@@ -144,12 +144,12 @@ public struct CSVDataLoader: S5TFDataLoader {
             fatalError("This data loader does not have a batch size. Set a batch size by calling `.batched(...)`")
         }
 
-        guard index < (count - batchSize) else {
+        guard index < (count - 1) else {
             return nil
         }
 
         // Use a partial batch is fewer items than the batch size are available.
-        let thisBatchSize = Swift.min(count - index - batchSize, batchSize)
+        let thisBatchSize = Swift.min(count - index, batchSize)
 
         // TODO: update with broadcoasting.
         var batchFeatures = [Float]()
