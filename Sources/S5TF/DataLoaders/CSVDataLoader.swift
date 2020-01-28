@@ -4,23 +4,23 @@ import TensorFlow
 public struct CSVDataLoader: S5TFDataLoader {
     private var index = 0
 
-    public let batchSize: Int
-    public let data: Tensor<Float>
-    public let labels: Tensor<Int32>
+    public let batchSize: Int?
+    private let data: Tensor<Float>
+    private let labels: Tensor<Int32>
 
     public let count: Int
     public let numberOfFeatures: Int
 
     // MARK: - Initializers.
-    private init(batchSize: Int, data: Tensor<Float>, labels: Tensor<Int32>) {
+    private init(data: Tensor<Float>, labels: Tensor<Int32>, batchSize: Int? = nil) {
         guard data.shape.count == 2 else {
             fatalError("Data in CSVLoader should be 2-dimensional, but is \(labels.shape)-dimensional.")
         }
-        self.batchSize = batchSize
         self.data = data
         self.labels = labels
         self.count = data.shape.dimensions.first!
         self.numberOfFeatures = data.shape.dimensions.last!
+        self.batchSize = batchSize
     }
 
     /// Create a data loader from a comma seperated value (CSV) file.
@@ -39,8 +39,7 @@ public struct CSVDataLoader: S5TFDataLoader {
     public init(fromFileAt fileURL: URL,
                 columnNames: [String]? = nil,
                 featureColumnNames: [String] = [],
-                labelColumnNames: [String] = [],
-                batchSize: Int = 1) {
+                labelColumnNames: [String] = []) {
         // Validate file exists.
         guard FileManager.default.fileExists(atPath: fileURL.absoluteString) else {
             fatalError("File not found at \(fileURL).")
@@ -129,24 +128,28 @@ public struct CSVDataLoader: S5TFDataLoader {
         let labelsTensor = Tensor<Int32>(labelValues)
 
         // Initialize self with the loaded data.
-        self.init(batchSize: batchSize, data: dataTensor, labels: labelsTensor)
+        self.init(data: dataTensor, labels: labelsTensor)
     }
 
     // MARK: Modifiers
     public func batched(_ batchSize: Int) -> CSVDataLoader {
-        return CSVDataLoader(batchSize: batchSize,
-                             data: self.data,
-                             labels: self.labels)
+        return CSVDataLoader(data: self.data,
+                             labels: self.labels,
+                             batchSize: batchSize)
     }
 
     // MARK: - Iterator
     public mutating func next() -> S5TFLabeledBatch? {
-        guard index < (count - batchSize) else {
+        guard let batchSize = batchSize else {
+            fatalError("This data loader does not have a batch size. Set a batch size by calling `.batched(...)`")
+        }
+
+        guard index < (count - 1) else {
             return nil
         }
 
         // Use a partial batch is fewer items than the batch size are available.
-        let thisBatchSize = Swift.min(count - index - batchSize, batchSize)
+        let thisBatchSize = Swift.min(count - index, batchSize)
 
         // TODO: update with broadcoasting.
         var batchFeatures = [Float]()
