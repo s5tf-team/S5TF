@@ -5,8 +5,8 @@ public struct S5TFUtils {
     /// Run a command in the shell.
     /// 
     /// - Parameters:
-    ///   - executableURL: The path to the command as URL.
-    ///   - parameters: A list of parameters passed to the command.
+    ///   - `launchPath`: the path to the command.
+    ///   - `parameters`: a list of parameters passed to the command.
     ///
     /// - Returns: Output, termination status of the command.
     ///
@@ -67,6 +67,90 @@ public struct S5TFUtils {
         let output = String(data: data, encoding: String.Encoding.utf8)
 
         return (output, task.terminationStatus)
+    }
+
+    /// Extract a downloaded archive
+    ///
+    /// Supported file extensions:
+    /// - `.gz`
+    /// - `.tgz`
+    ///
+    /// - Parameters:
+    ///   - `fileAtURL`: the URL for the archive.
+    ///
+    /// - Returns: output, termination status of the command.
+    ///
+    /// ### Usage Example: ###
+    ///
+    /// - Extract `archive.tgz`:
+    ///
+    ///   ```
+    ///   extract(fileAt: URL(string: "archive.tgz")!)
+    ///   ```
+    ///
+    /// - Extract `another_archive.gz`
+    ///
+    ///   ```
+    ///   extract(fileAt: URL(string: "archive_archive.gz")!)
+    ///   ```
+    static public func extract(archiveURL: URL) -> URL {
+        let path = archiveURL.path
+        let fileExtension = archiveURL.pathExtension
+
+        #if os(macOS)
+            let binary = "/usr/bin/"
+        #else
+            let binary = "/bin/"
+        #endif
+
+        let tool: String
+        let arguments: [String]
+
+        switch fileExtension {
+            case "gz":
+                tool = "gunzip"
+                arguments = [path]
+            case "tar.gz", "tgz":
+                tool = "tar"
+                arguments = ["xzf", path]
+            default:
+                fatalError("Unsupported file extension for archive.")
+        }
+        if !FileManager.default.fileExists(atPath: archiveURL.deletingPathExtension().absoluteString) {
+            do {
+                try shell(binary + tool, arguments)
+            } catch {
+                fatalError("Error extracting file.")
+            }
+        }
+
+        return URL(string: archiveURL.deletingPathExtension().absoluteString)!
+    }
+
+    /// Download and extract an archive.
+    /// 
+    /// - Parameters:
+    ///   - `remoteURL`: the remote URL for the archive.
+    ///   - `cacheName`: name of the cache.
+    ///   - `fileName`: name of the file.
+    ///
+    /// - Returns: URL of extracted archive.
+    ///
+    /// ### Usage Example: ###
+    ///
+    /// - Download and extract "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz":
+    ///
+    ///   ```
+    ///   downloadAndExtract(remoteURL: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///                      cacheName: "mnist", fileName: "train_images")
+    ///   ```
+    static public func downloadAndExtract(remoteURL: URL, cacheName: String, fileName: String) -> URL? {
+        guard let archiveURL = Downloader.download(fileAt: remoteURL,
+                                                   cacheName: cacheName,
+                                                   fileName: fileName) else {
+                                                       fatalError("File could not be downloaded.")
+        }
+        return extract(archiveURL: archiveURL)
     }
 }
 
