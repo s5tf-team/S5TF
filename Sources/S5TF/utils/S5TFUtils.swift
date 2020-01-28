@@ -128,11 +128,12 @@ public struct S5TFUtils {
     ///                        cacheName: "mnist", fileName: "train_images")
     ///     ```
     ///
-    @discardableResult
     static public func downloadAndExtract(remoteURL: URL, cacheName: String, fileName: String) -> URL? {
-        let archiveURL = Downloader.download(fileAt: remoteURL,
-                                             cacheName: cacheName,
-                                             fileName: fileName)
-        return extract(archiveURL: archiveURL!)
+        guard let archiveURL = Downloader.download(fileAt: remoteURL,
+                                                   cacheName: cacheName,
+                                                   fileName: fileName) else {
+                                                       fatalError("File could not be downloaded.")
+        }
+        return extract(archiveURL: archiveURL)
     }
 }
