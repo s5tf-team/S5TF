@@ -11,7 +11,7 @@ public struct CSVDataLoader: S5TFDataLoader {
     public let count: Int
     public let numberOfFeatures: Int
 
-    // MARK: - Initializers.
+    // MARK: - Initializers
     private init(batchSize: Int, data: Tensor<Float>, labels: Tensor<Int32>) {
         guard data.shape.count == 2 else {
             fatalError("Data in CSVLoader should be 2-dimensional, but is \(labels.shape)-dimensional.")
