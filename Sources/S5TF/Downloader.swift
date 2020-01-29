@@ -66,6 +66,8 @@ public class Downloader: NSObject {
                          cacheName: String,
                          fileName: String,
                          completionHandler: @escaping (URL?, Error?) -> Void) {
+        print("Downloading: \(remoteUrl)")
+
         // Create a cache directory if non-existent.
         let cacheURL = baseURL.appendingPathComponent(cacheName, isDirectory: true)
         if !FileManager.default.fileExists(atPath: cacheURL.absoluteString) {
@@ -80,6 +82,7 @@ public class Downloader: NSObject {
         // Check whether the file is already downloaded.
         let saveURL = cacheURL.appendingPathComponent(fileName, isDirectory: false)
         if FileManager.default.fileExists(atPath: saveURL.absoluteString) {
+            print("Found cached version at: \(saveURL)")
             completionHandler(saveURL, nil)
             return
         } else {
@@ -119,7 +122,7 @@ public class Downloader: NSObject {
         var localURL: URL?
         downloader.download(fileAt: remoteUrl,
                             cacheName: cacheName,
-                            fileName: "train-images.gz") { url, error in
+                            fileName: fileName) { url, error in
             guard let url = url else {
                 if let error = error { print(error) }
                 fatalError("Data not downloaded.")
