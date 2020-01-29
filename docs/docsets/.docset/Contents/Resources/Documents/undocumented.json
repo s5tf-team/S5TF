@@ -51,42 +51,70 @@
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
-      "line": 9,
+      "line": 4,
+      "symbol": "S5TFBatch",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 6,
+      "symbol": "S5TFUnlabeledBatch",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 7,
       "symbol": "S5TFUnlabeledBatch.data",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
-      "line": 11,
+      "line": 9,
       "symbol": "S5TFUnlabeledBatch.init(data:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
-      "line": 18,
+      "line": 14,
+      "symbol": "S5TFLabeledBatch",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 15,
       "symbol": "S5TFLabeledBatch.data",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
-      "line": 19,
+      "line": 16,
       "symbol": "S5TFLabeledBatch.labels",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
-      "line": 21,
+      "line": 18,
       "symbol": "S5TFLabeledBatch.init(data:labels:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
-      "line": 30,
+      "line": 25,
+      "symbol": "S5TFDataLoader",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/rickwierenga/workspace/gci/src/s/S5TF/Sources/S5TF/DataLoaders/Core.swift",
+      "line": 26,
       "symbol": "S5TFDataLoader.batched(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

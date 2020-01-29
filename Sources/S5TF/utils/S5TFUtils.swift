@@ -2,23 +2,27 @@ import Foundation
 
 /// General helper functions for Swift.
 public struct S5TFUtils {
-    /// Run a command in the shell
+    /// Run a command in the shell.
     /// 
     /// - Parameters:
     ///   - `launchPath`: the path to the command.
     ///   - `parameters`: a list of parameters passed to the command.
     ///
-    /// - Returns: output, termination status of the command.
+    /// - Returns: Output, termination status of the command.
     ///
-    /// - Usage Example:
-    ///   - Execute `ls -l -g`:
-    ///     ```
-    ///     shell("/bin/ls", "-l", "-g")
-    ///     ```
-    ///   - Execute `ls -lah`
-    ///     ```
-    ///     shell("/bin/ls", "-lah")
-    ///     ```
+    /// ### Usage Example: ###
+    ///
+    ///  - Execute `ls -l -g`:
+    ///
+    ///    ````
+    ///    shell("/bin/ls", "-l", "-g")
+    ///    ````
+    ///
+    ///  - Execute `ls -lah`
+    ///
+    ///    ````
+    ///    shell("/bin/ls", "-lah")
+    ///    ````
     @discardableResult
     static public func shell(_ launchPath: String, _ arguments: String...) throws -> (out: String?, status: Int32) {
         return try shell(launchPath, arguments)
@@ -26,24 +30,28 @@ public struct S5TFUtils {
 
     /// Run a command in the shell.
     ///
-    /// Wrapper for shell(_ launchPath: String, arguments: String...) because splatting is not supported in Swift.
+    /// Wrapper for `shell(_ launchPath: String, arguments: String...)` because splatting is not supported in Swift.
     /// See https://bugs.swift.org/browse/SR-128 for more details.
     ///
     /// - Parameters:
-    ///   - `launchPath`: the path to the command.
-    ///   - `arguments`: a list of arguments passed to the command.
+    ///   - `launchPath`: The path to the command.
+    ///   - `paramters`: A list of paramters passed to the command.
     ///
-    /// - Returns: output, termination status of the command.
+    /// - Returns: Output, termination status of the command.
     ///
     /// - Usage Example:
+    ///
     ///   - Execute `ls -l -g`:
-    ///     ```
-    ///     shell("/bin/ls", ["-l", "-g"])`
-    ///     ```
+    ///
+    ///     ````
+    ///     shell("/bin/ls", ["-l", "-g"])
+    ///     ````
+    ///
     ///   - Execute `ls -lah`
-    ///     ```
-    ///     shell("/bin/ls", ["-lah"])`
-    ///     ```
+    ///
+    ///     ````
+    ///     shell("/bin/ls", ["-lah"])
+    ///     ````
     @discardableResult
     static public func shell(_ launchPath: String, _ arguments: [String]) throws -> (out: String?, status: Int32) {
         let task = Process()
@@ -62,22 +70,29 @@ public struct S5TFUtils {
     }
 
     /// Extract a downloaded archive
-    /// 
+    ///
+    /// Supported file extensions:
+    /// - `.gz`
+    /// - `.tgz`
+    ///
     /// - Parameters:
     ///   - `fileAtURL`: the URL for the archive.
     ///
     /// - Returns: output, termination status of the command.
     ///
-    /// - Usage Example:
-    ///   - Extract "archive.tgz":
-    ///     ```
-    ///     extract(fileAt: URL(string: "archive.tgz")!)
-    ///     ```
-    ///   - Extract "another_archive.gz"
-    ///     ```
-    ///     extract(fileAt: URL(string: "archive_archive.gz")!)
-    ///     ```
+    /// ### Usage Example: ###
     ///
+    /// - Extract `archive.tgz`:
+    ///
+    ///   ```
+    ///   extract(fileAt: URL(string: "archive.tgz")!)
+    ///   ```
+    ///
+    /// - Extract `another_archive.gz`
+    ///
+    ///   ```
+    ///   extract(fileAt: URL(string: "archive_archive.gz")!)
+    ///   ```
     static public func extract(archiveURL: URL) -> URL {
         let path = archiveURL.path
         let fileExtension = archiveURL.pathExtension
@@ -101,7 +116,6 @@ public struct S5TFUtils {
             default:
                 fatalError("Unsupported file extension for archive.")
         }
-
         if !FileManager.default.fileExists(atPath: archiveURL.deletingPathExtension().absoluteString) {
             do {
                 try shell(binary + tool, arguments)
@@ -122,12 +136,14 @@ public struct S5TFUtils {
     ///
     /// - Returns: URL of extracted archive.
     ///
-    /// - Usage Example:
-    ///   - Download and extract "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz":
-    ///     ```
-    ///     downloadAndExtract(remoteURL: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
-    ///                        cacheName: "mnist", fileName: "train_images")
-    ///     ```
+    /// ### Usage Example: ###
+    ///
+    /// - Download and extract "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz":
+    ///
+    ///   ```
+    ///   downloadAndExtract(remoteURL: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///                      cacheName: "mnist", fileName: "train_images")
+    ///   ```
     static public func downloadAndExtract(remoteURL: URL, cacheName: String, fileName: String) -> URL? {
         guard let archiveURL = Downloader.download(fileAt: remoteURL,
                                                    cacheName: cacheName,
@@ -137,3 +153,4 @@ public struct S5TFUtils {
         return extract(archiveURL: archiveURL)
     }
 }
+

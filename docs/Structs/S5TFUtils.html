@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
            Docs
         </a>
-         (31% documented)
+         (36% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -121,19 +121,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Run a command in the shell</p>
+                        <p>Run a command in the shell.</p>
 <h3 id='usage-example' class='heading'>Usage Example:</h3>
 
 <ul>
-<li>Execute <code>ls -l -g</code>:
-<code>
-shell(&quot;/bin/ls&quot;, &quot;-l&quot;, &quot;-g&quot;)`
-</code></li>
-<li>Execute <code>ls -lah</code>
-<code>
-shell(&quot;/bin/ls&quot;, &quot;-lah&quot;)`
-</code></li>
+<li>Execute <code>ls -l -g</code>:</li>
 </ul>
+<pre class="highlight swift"><code>   <span class="nf">shell</span><span class="p">(</span><span class="s">"/bin/ls"</span><span class="p">,</span> <span class="s">"-l"</span><span class="p">,</span> <span class="s">"-g"</span><span class="p">)</span>
+</code></pre>
+
+<ul>
+<li>Execute <code>ls -lah</code></li>
+</ul>
+<pre class="highlight swift"><code>   <span class="nf">shell</span><span class="p">(</span><span class="s">"/bin/ls"</span><span class="p">,</span> <span class="s">"-lah"</span><span class="p">)</span>
+</code></pre>
 
                       </div>
                       <div class="declaration">
@@ -147,7 +148,7 @@ shell(&quot;/bin/ls&quot;, &quot;-lah&quot;)`
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>output, termination status of the command.</p>
+                        <p>Output, termination status of the command.</p>
                       </div>
                     </section>
                   </div>
@@ -167,22 +168,23 @@ shell(&quot;/bin/ls&quot;, &quot;-lah&quot;)`
                       <div class="abstract">
                         <p>Run a command in the shell.</p>
 
-<p>Wrapper for shell(_ launchPath: String, arguments: String&hellip;) because splatting is not supported in Swift.
+<p>Wrapper for <code>shell(_ launchPath: String, arguments: String...)</code> because splatting is not supported in Swift.
 See <a href="https://bugs.swift.org/browse/SR-128">https://bugs.swift.org/browse/SR-128</a> for more details.</p>
 
 <ul>
 <li><p>Usage Example:</p>
 
 <ul>
-<li>Execute <code>ls -l -g</code>:
-<code>
-shell(&quot;/bin/ls&quot;, [&quot;-l&quot;, &quot;-g&quot;])`
-</code></li>
-<li>Execute <code>ls -lah</code>
-<code>
-shell(&quot;/bin/ls&quot;, [&quot;-lah&quot;])`
-</code></li>
-</ul></li>
+<li>Execute <code>ls -l -g</code>:</li>
+</ul>
+<pre class="highlight swift"><code><span class="nf">shell</span><span class="p">(</span><span class="s">"/bin/ls"</span><span class="p">,</span> <span class="p">[</span><span class="s">"-l"</span><span class="p">,</span> <span class="s">"-g"</span><span class="p">])</span>
+</code></pre>
+
+<ul>
+<li>Execute <code>ls -lah</code></li>
+</ul>
+<pre class="highlight swift"><code><span class="nf">shell</span><span class="p">(</span><span class="s">"/bin/ls"</span><span class="p">,</span> <span class="p">[</span><span class="s">"-lah"</span><span class="p">])</span>
+</code></pre></li>
 </ul>
 
                       </div>
@@ -197,7 +199,97 @@ shell(&quot;/bin/ls&quot;, [&quot;-lah&quot;])`
                       </div>
                       <div>
                         <h4>Return Value</h4>
+                        <p>Output, termination status of the command.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4S5TF0A7TFUtilsV7extract10archiveURL10Foundation0F0VAH_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/extract(archiveURL:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4S5TF0A7TFUtilsV7extract10archiveURL10Foundation0F0VAH_tFZ">extract(archiveURL:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Extract a downloaded archive</p>
+
+<p>Supported file extensions:</p>
+
+<ul>
+<li><code>.gz</code></li>
+<li><p><code>.tgz</code></p></li>
+</ul>
+<h3 id='usage-example' class='heading'>Usage Example:</h3>
+
+<ul>
+<li>Extract <code>archive.tgz</code>:</li>
+</ul>
+<pre class="highlight swift"><code>  <span class="nf">extract</span><span class="p">(</span><span class="nv">fileAt</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"archive.tgz"</span><span class="p">)</span><span class="o">!</span><span class="p">)</span>
+</code></pre>
+
+<ul>
+<li>Extract <code>another_archive.gz</code></li>
+</ul>
+<pre class="highlight swift"><code>  <span class="nf">extract</span><span class="p">(</span><span class="nv">fileAt</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"archive_archive.gz"</span><span class="p">)</span><span class="o">!</span><span class="p">)</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">extract</span><span class="p">(</span><span class="nv">archiveURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
                         <p>output, termination status of the command.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4S5TF0A7TFUtilsV18downloadAndExtract9remoteURL9cacheName04fileJ010Foundation0H0VSgAJ_S2StFZ"></a>
+                    <a name="//apple_ref/swift/Method/downloadAndExtract(remoteURL:cacheName:fileName:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4S5TF0A7TFUtilsV18downloadAndExtract9remoteURL9cacheName04fileJ010Foundation0H0VSgAJ_S2StFZ">downloadAndExtract(remoteURL:cacheName:fileName:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Download and extract an archive.</p>
+<h3 id='usage-example' class='heading'>Usage Example:</h3>
+
+<ul>
+<li>Download and extract &ldquo;<a href="https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz%22:">https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz&rdquo;:</a></li>
+</ul>
+<pre class="highlight swift"><code>  <span class="nf">downloadAndExtract</span><span class="p">(</span><span class="nv">remoteURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz"</span><span class="p">)</span><span class="o">!</span><span class="p">,</span>
+                     <span class="nv">cacheName</span><span class="p">:</span> <span class="s">"mnist"</span><span class="p">,</span> <span class="nv">fileName</span><span class="p">:</span> <span class="s">"train_images"</span><span class="p">)</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">downloadAndExtract</span><span class="p">(</span><span class="nv">remoteURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">cacheName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">fileName</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>URL of extracted archive.</p>
                       </div>
                     </section>
                   </div>

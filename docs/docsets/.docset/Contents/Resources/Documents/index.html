@@ -22,7 +22,7 @@
         <a class="header-link" href="index.html">
            Docs
         </a>
-         (31% documented)
+         (36% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -128,6 +128,14 @@
 <p>Thanks for even considering contributing.</p>
 
 <p>Make sure to run <a href="https://github.com/realm/SwiftLint"><code>swiftlint</code></a> on your code. If you are not sure about how to format something, refer to the <a href="https://google.github.io/swift/">Google Swift Style Guide</a>.</p>
+
+<p>We use <a href="https://github.com/realm/jazzy">jazzy</a> to generate documentation for this projct. If your contribution creates new objects, please create documentation with the following command:</p>
+<pre class="highlight shell"><code>jazzy <span class="se">\</span>
+<span class="nt">--author</span> S5TF Team <span class="se">\</span>
+<span class="nt">--author_url</span> http://s5tf-team.github.io <span class="se">\</span>
+<span class="nt">--github_url</span> https://github.com/s5tf-team/ <span class="se">\</span>
+<span class="nt">--theme</span> fullwidth
+</code></pre>
 
 <p>Please link to the completed GitHub Actions <code>build</code> test in your fork with your PR.</p>
 
