@@ -124,7 +124,7 @@ public struct S5TFUtils {
             }
         }
 
-        return URL(string: archiveURL.deletingPathExtension().absoluteString)!
+        return archiveURL.deletingPathExtension()
     }
 
     /// Download and extract an archive.
