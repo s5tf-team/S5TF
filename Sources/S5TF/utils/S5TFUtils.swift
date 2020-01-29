@@ -101,7 +101,8 @@ public struct S5TFUtils {
             default:
                 fatalError("Unsupported file extension for archive.")
         }
-        if !FileManager.default.fileExists(atPath: archiveURL.absoluteString.deletingPathExtension) {
+
+        if !FileManager.default.fileExists(atPath: archiveURL.deletingPathExtension().absoluteString) {
             do {
                 try shell(binary + tool, arguments)
             } catch {
@@ -109,7 +110,7 @@ public struct S5TFUtils {
             }
         }
 
-        return URL(string: archiveURL.absoluteString.deletingPathExtension)!
+        return archiveURL.deletingPathExtension()
     }
 
     /// Download and extract an archive.
@@ -127,7 +128,6 @@ public struct S5TFUtils {
     ///     downloadAndExtract(remoteURL: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
     ///                        cacheName: "mnist", fileName: "train_images")
     ///     ```
-    ///
     static public func downloadAndExtract(remoteURL: URL, cacheName: String, fileName: String) -> URL? {
         guard let archiveURL = Downloader.download(fileAt: remoteURL,
                                                    cacheName: cacheName,
