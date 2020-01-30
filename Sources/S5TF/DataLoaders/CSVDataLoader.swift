@@ -1,68 +1,61 @@
 import Foundation
 import TensorFlow
 
-public struct CSVDataLoader: S5TFDataLoader {
+public struct CSVDataLoader<Batch: S5TFLabeledBatch>: S5TFDataLoader {
     private var index = 0
 
     public let batchSize: Int?
-    private let data: Tensor<Float>
-    private let labels: Tensor<Int32>
+    private let csvData: [[String]]
+    private let columnNames: [String]
+    private let featureColumnNames: [String]
+    private let labelColumnNames: [String]
 
-    public let count: Int
-    public let numberOfFeatures: Int
+    // `stringEcodedValues` is a dictionary of columns. Each column has a dictionary mapping a label
+    // to the corresponding integer label.
+    private var stringEcodedValues = [String: [String: Int]]()
+
+    public var count: Int { csvData.count }
+    public var numberOfFeatures: Int { featureColumnNames.count }
+    public var numberOfLabels: Int { labelColumnNames.count }
 
     // MARK: - Initializers.
-    private init(data: Tensor<Float>, labels: Tensor<Int32>, batchSize: Int? = nil) {
-        guard data.shape.count == 2 else {
-            fatalError("Data in CSVLoader should be 2-dimensional, but is \(labels.shape)-dimensional.")
-        }
-        self.data = data
-        self.labels = labels
-        self.count = data.shape.dimensions.first!
-        self.numberOfFeatures = data.shape.dimensions.last!
+    private init(
+        csvData: [[String]],
+        columnNames: [String],
+        featureColumnNames: [String],
+        labelColumnNames: [String],
+        batchSize: Int? = nil
+    ) {
+        self.csvData = csvData
         self.batchSize = batchSize
+        self.columnNames = columnNames
+        self.featureColumnNames = featureColumnNames
+        self.labelColumnNames = labelColumnNames
     }
 
     /// Create a data loader from a comma seperated value (CSV) file.
+    ///
+    /// This data loader parses the columns in `featureColumnNames` to Float values. If a value is of type String,
+    /// it is encoded to 0, 1, 2, etc. Columns with a header in `labelColumnNames` are used as labels. All labeled
+    /// batch types are supported, but strings can only be used with `S5TFCategoricalBatch`. If `S5TFCategoricalBatch`
+    /// encounters float values in the label columns, they are converted to Int32.
     ///
     /// - Parameters:
     ///   - fromFileAt fileURL: the url of the csv file.
     ///   - columnNames: the columns of the csv file. If these are supplied, we assume the CSV does not
     ///                  have column names.
     ///   - featureColumnNames: the columns to use as feature names. If this array is empty no feature names
-    ///                         will be used and all columns except labelColumnNames will be used as features.
-    ///   - labelColumnNames: the name of the columns to use labels. Those will be converted to integers. If no
-    ///                       label names are supplied, the `columns` will be used as features, other columns will
-    ///                       be labels. If no column names are supplied either, all columns are interpreted
-    ///                       as features.
-    ///   - batchSize: the batch size. 1 by default.
-    public init(fromFileAt fileURL: URL,
+    ///                       will be used and all columns except labelColumnNames will be used as features.
+    ///   - labelColumnNames: the name of the columns to use as output. Those will be converted to integers. If no
+    ///                        label names are supplied, the `columns` will be used as features, other columns will
+    ///                        be labels. If no column names are supplied either, all columns are interpreted
+    ///                        as features.
+    public init(fromFileAt path: String,
                 columnNames: [String]? = nil,
                 featureColumnNames: [String] = [],
                 labelColumnNames: [String] = []) {
-        // Validate file exists.
-        guard FileManager.default.fileExists(atPath: fileURL.absoluteString) else {
-            fatalError("File not found at \(fileURL).")
-        }
+        let (csvData, definiteColumnNames) = S5TFUtils.readCSV(at: path, columnNames: columnNames)
 
-        // Load data from disk.
-        guard let rawData = try? String(contentsOfFile: fileURL.absoluteString) else {
-            fatalError("Data at \(fileURL) could not be loaded.")
-        }
-        var rows = rawData.split(separator: "\n").map(String.init)
-
-        // Get column names.
-        let definiteColumnNames: [String]
-        if let columnNames = columnNames, !columnNames.isEmpty {
-            definiteColumnNames = columnNames
-        } else {
-            let firstrow = rows[0]
-            definiteColumnNames = firstrow.split(separator: ",").map(String.init)
-            // Use `.map({String($0)})` because `.map(String.init)` does not compile.
-            rows = rows.dropFirst().map({String($0)}) // Drop column row.
-        }
-
-        // Make sure featureColumnNames and labelColumnNames are valid.
         guard Set(featureColumnNames).isDisjoint(with: labelColumnNames) else {
             fatalError("Found intersection between featureColumnNames and " +
                 "labelColumnNames: \(Set(featureColumnNames).intersection(labelColumnNames)). This is illegal.")
@@ -76,47 +69,63 @@ public struct CSVDataLoader: S5TFDataLoader {
             fatalError("labelColumnNames must be a strict subset of column names.")
         }
 
-        let definiteFeatureColumnNames: [String]
-        if featureColumnNames.isEmpty {
-            definiteFeatureColumnNames = [String](Set(definiteColumnNames).subtracting(labelColumnNames))
-        } else { definiteFeatureColumnNames = featureColumnNames }
+        self.init(
+            csvData: csvData,
+            columnNames: definiteColumnNames,
+            featureColumnNames: featureColumnNames,
+            labelColumnNames: labelColumnNames
+        )
+    }
 
-        // Use a flattened array because Swift does not support 2 dimensional arrays for initialization (yet?).
-        var featureValues = [Float]() // TODO: make this dynamic. Probably using a generic parameter.
-        var labelValues = [Int32]()
+    // MARK: Modifiers
+    public func batched(_ batchSize: Int) -> CSVDataLoader {
+        return CSVDataLoader(csvData: csvData,
+                             columnNames: columnNames,
+                             featureColumnNames: featureColumnNames,
+                             labelColumnNames: labelColumnNames,
+                             batchSize: batchSize)
+    }
 
-        // Parse CSV.
-        let totalNumberOfColumns = rows[0].split(separator: ",").count
-        var labels = [String]()
-        for (line, row) in rows.enumerated() {
-            let items = row.split(separator: ",").map(String.init)
+    // MARK: - Iterator
+    public mutating func next() -> Batch? {
+        guard let batchSize = batchSize else {
+            fatalError("This data loader does not have a batch size. Set a batch size by calling `.batched(...)`")
+        }
 
-            // Make sure rows are consitent.
-            guard items.count <= definiteColumnNames.count else {
-                fatalError("Found \(items.count) items on row \(line) while \(definiteColumnNames.count) are needed.")
-            }
+        guard index <= (count - 1) else {
+            return nil
+        }
 
-            guard items.count == totalNumberOfColumns else {
-                fatalError("First row had \(totalNumberOfColumns) items but row \(line) has \(items.count) columns.")
-            }
+        // Use a partial batch is fewer items than the batch size are available.
+        let thisBatchSize = Swift.min(count - index, batchSize)
 
-            // Load features and labels.
-            for (columnIndex, value) in items.enumerated() {
-                let column = definiteColumnNames[columnIndex]
-                if definiteFeatureColumnNames.contains(column) {
-                    // TODO: make Float(...) generic.
-                    featureValues.append(Float(value)!)
-                } else if labelColumnNames.contains(column) {
-                    // TODO: make Float(...) generic.
-                    let index = labels.firstIndex(of: value)
-                    if let index = index {
-                        labelValues.append(Int32(index))
-                    } else if let max = labelValues.max() {
-                        labelValues.append(max+1)
-                        labels.append(value)
+        var featureValues = [Float]()
+        var labelValues: [Float] = []
+
+        for i in index..<index + thisBatchSize {
+            let row = csvData[i]
+
+            for (columnIndex, value) in row.enumerated() {
+                let column = columnNames[columnIndex]
+
+                // Check whether this column is a feature or label. If none, we continue to the next column.
+                if featureColumnNames.contains(column) {
+                    if let floatValue = Float(value) {
+                        featureValues.append(floatValue)
                     } else {
-                        labelValues.append(0)
-                        labels.append(value)
+                        featureValues.append(Float(encode(label: value, inColumn: column)))
+                    }
+                } else if labelColumnNames.contains(column) {
+                    if let batchTypeValue = Float(value) {
+                        labelValues.append(batchTypeValue)
+                    } else {
+                        if Batch.self != S5TFCategoricalBatch.self {
+                            fatalError("Found a string on index \(i), but the batch type is \(Batch.self), not " +
+                                       "`S5TFCategoricalBatch`. Strings can only be used with categorical batches. " +
+                                       "If you are not shuffling, index = line number.")
+                        }
+
+                        labelValues.append(Float(encode(label: value, inColumn: column)))
                     }
                 }
             }
@@ -124,48 +133,38 @@ public struct CSVDataLoader: S5TFDataLoader {
 
         // Convert so Swift Tensors and store on self.
         let dataTensor = Tensor<Float>(featureValues)
-            .reshaped(to: TensorShape(rows.count, definiteFeatureColumnNames.count))
-        let labelsTensor = Tensor<Int32>(labelValues)
-
-        // Initialize self with the loaded data.
-        self.init(data: dataTensor, labels: labelsTensor)
-    }
-
-    // MARK: Modifiers
-    public func batched(_ batchSize: Int) -> CSVDataLoader {
-        return CSVDataLoader(data: self.data,
-                             labels: self.labels,
-                             batchSize: batchSize)
-    }
-
-    // MARK: - Iterator
-    public mutating func next() -> S5TFLabeledBatch? {
-        guard let batchSize = batchSize else {
-            fatalError("This data loader does not have a batch size. Set a batch size by calling `.batched(...)`")
-        }
-
-        guard index < (count - 1) else {
-            return nil
-        }
-
-        // Use a partial batch is fewer items than the batch size are available.
-        let thisBatchSize = Swift.min(count - index, batchSize)
-
-        // TODO: update with broadcoasting.
-        var batchFeatures = [Float]()
-        var batchLabels = [Int32]()
-
-        for line in index..<(index + thisBatchSize) {
-            for columnIndex in data[line].array {
-                batchFeatures.append(columnIndex.scalar!)
-            }
-            batchLabels.append(labels[line].scalar!)
-        }
-        let data = Tensor<Float>(batchFeatures).reshaped(to: TensorShape(thisBatchSize, numberOfFeatures))
-        let labels = Tensor<Int32>(batchLabels)
+            .reshaped(to: TensorShape(thisBatchSize, featureColumnNames.count))
+        let labelsTensor = Tensor<Float>(labelValues)
+            .reshaped(to: TensorShape(thisBatchSize, labelColumnNames.count))
 
         self.index += thisBatchSize
 
-        return S5TFLabeledBatch(data: data, labels: labels)
+        if Batch.self == S5TFCategoricalBatch.self {
+            let labels = Tensor<Int32>(labelsTensor)
+            // swiftlint:disable:next force_cast
+            return (S5TFCategoricalBatch(data: dataTensor, labels: labels) as! Batch)
+        } else if Batch.self == S5TFNumericalBatch.self {
+            // swiftlint:disable:next force_cast
+            return (S5TFNumericalBatch(data: dataTensor, targets: labelsTensor) as! Batch)
+        } else {
+            fatalError("Unsupported batch type \(Batch.self)")
+        }
+    }
+
+    /// A helper function to encode string labels to indices.
+    mutating private func encode(label: String, inColumn column: String) -> Int32 {
+        // Encode strings.
+        if stringEcodedValues[column] == nil {
+            // We have never seen this column.
+            stringEcodedValues[column] = [label: 0]
+            return 0
+        } else if stringEcodedValues[column]![label] == nil {
+            // We have never seen this label.
+            let max = (stringEcodedValues[column]!.values.max() ?? 0)
+            stringEcodedValues[column]![label] = max + 1
+            return Int32(max + 1)
+        } else {
+            return Int32(stringEcodedValues[column]![label]!)
+        }
     }
 }

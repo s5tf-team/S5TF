@@ -152,5 +152,68 @@ public struct S5TFUtils {
         }
         return extract(archiveURL: archiveURL)
     }
-}
 
+    /// Create a data loader from a comma seperated value (CSV) file.
+    ///
+    /// - Parameters:
+    ///   - at path: The path of the csv file.
+    ///   - columnNames: The columns of the csv file to load. If no column names
+    ///                  are supplied the items in the first row are intperted as column names.
+    ///
+    /// - Returns:
+    ///   - An array of an array where the inner array represents a single row and the outer
+    ///     array contains the rows. All values are Strings.
+    ///   - An array of column names.
+    public static func readCSV(at path: String, columnNames: [String]? = nil) -> ([[String]], [String]) {
+        // Validate file exists.
+        guard FileManager.default.fileExists(atPath: path) else {
+            fatalError("File not found at \(path).")
+        }
+
+        // Load data from disk.
+        guard let rawData = try? String(contentsOfFile: path) else {
+            fatalError("Data at \(path) could not be loaded.")
+        }
+        var rows = rawData.split(separator: "\n").map(String.init)
+        let firstRow = rows[0]
+
+        // Get column names.
+        let definiteColumnNames: [String]
+        if let columnNames = columnNames, !columnNames.isEmpty {
+            definiteColumnNames = columnNames
+        } else {
+            definiteColumnNames = firstRow.split(separator: ",").map(String.init)
+            // Use `.map({String($0)})` because `.map(String.init)` does not compile.
+            rows = rows.dropFirst().map({ String($0) }) // Drop column row.
+        }
+
+        // Load file.
+        let totalNumberOfColumns = firstRow.split(separator: ",").count
+        var values = [[String]]()
+        for (line, row) in rows.enumerated() {
+            let items = row.split(separator: ",").map(String.init)
+
+            // Make sure rows are consitent.
+            guard items.count <= definiteColumnNames.count else {
+                fatalError("Found \(items.count) items on row \(line) while \(definiteColumnNames.count) are needed.")
+            }
+
+            guard items.count == totalNumberOfColumns else {
+                fatalError("First row had \(totalNumberOfColumns) items but row \(line) has \(items.count) columns.")
+            }
+
+            // Add a new empty row to the `values array`.
+            values.append([String]())
+
+            // Load columns in this row.
+            for (columnIndex, value) in items.enumerated() {
+                let column = definiteColumnNames[columnIndex]
+                if definiteColumnNames.contains(column) {
+                    values[line].append(value)
+                }
+            }
+        }
+
+        return (values, definiteColumnNames)
+    }
+}
