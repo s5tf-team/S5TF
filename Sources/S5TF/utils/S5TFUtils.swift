@@ -107,14 +107,14 @@ public struct S5TFUtils {
         let arguments: [String]
 
         switch fileExtension {
-            case "gz":
-                tool = "gunzip"
-                arguments = [path]
-            case "tar.gz", "tgz":
-                tool = "tar"
-                arguments = ["xzf", path]
-            default:
-                fatalError("Unsupported file extension for archive.")
+        case "gz":
+            tool = "gunzip"
+            arguments = [path]
+        case "tar.gz", "tgz":
+            tool = "tar"
+            arguments = ["xzf", path]
+        default:
+            fatalError("Unsupported file extension for archive.")
         }
         if !FileManager.default.fileExists(atPath: archiveURL.deletingPathExtension().absoluteString) {
             do {
@@ -141,7 +141,8 @@ public struct S5TFUtils {
     /// - Download and extract "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz":
     ///
     ///   ```
-    ///   downloadAndExtract(remoteURL: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
+    ///   downloadAndExtract(
+    ///       remoteURL: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
     ///                      cacheName: "mnist", fileName: "train_images")
     ///   ```
     static public func downloadAndExtract(remoteURL: URL, cacheName: String, fileName: String) -> URL? {
@@ -150,7 +151,7 @@ public struct S5TFUtils {
                                                    fileName: fileName) else {
                                                        fatalError("File could not be downloaded.")
         }
+
         return extract(archiveURL: archiveURL)
     }
 }
-
