@@ -7,9 +7,9 @@ final class S5TFDownloaderTests: XCTestCase {
         let downloader = Downloader()
         var localURL: URL?
         downloader.download(
-            fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
-            cacheName: "mnist",
-            fileName: "train-images.gz"
+            fileAt: URL(string: "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data")!,
+            cacheName: "test",
+            fileName: "downloader-tests.csv"
         ) { url, error in
             guard let url = url else {
                 if let error = error { print(error) }
@@ -27,9 +27,9 @@ final class S5TFDownloaderTests: XCTestCase {
 
     func testSyncDownloader() {
         let localURL = Downloader.download(
-            fileAt: URL(string: "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz")!,
-            cacheName: "mnist",
-            fileName: "train-images.gz"
+            fileAt: URL(string: "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data")!,
+            cacheName: "test",
+            fileName: "downloader-tests.csv"
         )
         XCTAssertNotNil(localURL)
 
